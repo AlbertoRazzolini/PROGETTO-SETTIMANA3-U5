@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- Tutti i valori sono inseriti con th:text / th:href: Thymeleaf ne fa l'escape (niente th:utext) -->
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prezzo in calo</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f4f5f7; font-family:Arial, Helvetica, sans-serif; color:#1f2933;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f5f7; padding:24px 0;">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="560" cellpadding="0" cellspacing="0"
+                   style="max-width:560px; width:100%; background-color:#ffffff; border-radius:8px; overflow:hidden;">
+                <tr>
+                    <td style="background-color:#1f3a5f; padding:20px 28px; color:#ffffff; font-size:20px; font-weight:bold;">
+                        Mini Salone Auto
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:28px;">
+                        <p style="margin:0 0 16px; font-size:16px;">
+                            Ciao <span th:text="${nome}">Mario</span>,
+                        </p>
+                        <p style="margin:0 0 16px; font-size:16px; line-height:1.5;">
+                            buone notizie! Il prezzo di <strong th:text="${auto}">Marca Modello</strong>
+                            &egrave; sceso sotto la soglia che avevi impostato.
+                        </p>
+                        <table role="presentation" cellpadding="0" cellspacing="0"
+                               style="margin:0 0 24px; font-size:15px; border-collapse:collapse;">
+                            <tr>
+                                <td style="padding:6px 16px 6px 0; color:#52606d;">Prezzo attuale</td>
+                                <td style="padding:6px 0; font-weight:bold; color:#1a7f37;" th:text="${prezzo}">0,00 &euro;</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px 16px 6px 0; color:#52606d;">La tua soglia</td>
+                                <td style="padding:6px 0;" th:text="${soglia}">0,00 &euro;</td>
+                            </tr>
+                        </table>
+                        <p style="margin:0 0 28px;">
+                            <a th:href="${linkAuto}" href="#"
+                               style="display:inline-block; background-color:#1f3a5f; color:#ffffff; text-decoration:none;
+                                      padding:12px 22px; border-radius:6px; font-weight:bold;">
+                                Vedi l'annuncio
+                            </a>
+                        </p>
+                        <p style="margin:0; font-size:13px; color:#7b8794; line-height:1.5;">
+                            Non vuoi pi&ugrave; ricevere avvisi per questa auto?
+                            <a th:href="${linkDisattiva}" href="#" style="color:#7b8794;">Disattiva l'avviso</a>.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
