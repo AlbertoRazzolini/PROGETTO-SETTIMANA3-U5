@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router'
 import { Layout } from './layout/Layout'
+import { Accesso } from './pages/Accesso'
 import { DettaglioAuto } from './pages/DettaglioAuto'
 import { Vetrina } from './pages/Vetrina'
 
@@ -13,6 +14,8 @@ function App() {
       <Route element={<Layout />}>
         <Route index element={<Vetrina />} />
         <Route path="auto/:id" element={<DettaglioAuto />} />
+        <Route path="login" element={<Accesso scheda="accedi" />} />
+        <Route path="registrati" element={<Accesso scheda="registrati" />} />
         <Route path="*" element={<InCostruzione />} />
       </Route>
     </Routes>
