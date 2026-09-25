@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { cercaAuto, ORDINAMENTI, type FiltriAuto } from '../api/auto'
 import { messaggioErrore } from '../api/client'
+import { usePreferiti } from '../preferiti/preferitiState'
 import type { AutoCard, Pagina, StatoAuto } from '../api/types'
 import { CardAuto } from '../components/auto/CardAuto'
 import { CardAutoEvidenza } from '../components/auto/CardAutoEvidenza'
@@ -57,6 +58,12 @@ export function Vetrina() {
   const chiave = scriviFiltri(filtri).toString()
 
   const [risultato, setRisultato] = useState<Risultato | null>(null)
+  const { preferitoDi, inCorso, alternaPreferito } = usePreferiti()
+  const propsPreferito = (auto: AutoCard) => ({
+    preferito: preferitoDi(auto.id) !== undefined,
+    inCorso: inCorso(auto.id),
+    onPreferito: () => void alternaPreferito(auto),
+  })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -170,11 +177,11 @@ export function Vetrina() {
 
           {evidenza && (
             <>
-              <CardAutoEvidenza auto={evidenza} />
+              <CardAutoEvidenza auto={evidenza} {...propsPreferito(evidenza)} />
               {altre.length > 0 && (
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                   {altre.map((auto) => (
-                    <CardAuto key={auto.id} auto={auto} />
+                    <CardAuto key={auto.id} auto={auto} {...propsPreferito(auto)} />
                   ))}
                 </div>
               )}

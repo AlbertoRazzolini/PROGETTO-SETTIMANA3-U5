@@ -23,11 +23,13 @@ export function BadgeStato({ stato, className = '' }: { stato: StatoAuto; classN
 export function PulsantePreferito({
   attivo,
   onClick,
+  disabilitato = false,
   sovrapposto = false,
   className = '',
 }: {
   attivo: boolean
   onClick: () => void
+  disabilitato?: boolean
   sovrapposto?: boolean
   className?: string
 }) {
@@ -40,9 +42,11 @@ export function PulsantePreferito({
     <button
       type="button"
       onClick={onClick}
+      disabled={disabilitato}
+      aria-busy={disabilitato}
       aria-pressed={attivo}
       aria-label={attivo ? 'Rimuovi dai preferiti' : 'Aggiungi ai preferiti'}
-      className={`flex size-8 items-center justify-center rounded-full transition-colors ${stile} ${colore} ${className}`}
+      className={`flex size-8 items-center justify-center rounded-full transition-colors disabled:cursor-wait disabled:opacity-60 ${stile} ${colore} ${className}`}
     >
       <Icona nome="favorite" piena={attivo} className="text-lg" />
     </button>

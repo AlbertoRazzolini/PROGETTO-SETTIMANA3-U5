@@ -72,3 +72,23 @@ export interface AutoDettaglio {
   stato: StatoAuto
   createdAt: string
 }
+
+export interface Preferito {
+  id: string
+  createdAt: string
+  // false se l'admin ha rimesso l'annuncio in bozza dopo il salvataggio
+  disponibile: boolean
+  auto: AutoCard
+}
+
+export interface Avviso {
+  id: string
+  preferitoId: string
+  soglia: number
+  attivo: boolean
+  // true se per la soglia attuale la mail e' gia' stata inviata
+  notificato: boolean
+  createdAt: string
+  updatedAt: string
+  auto: AutoCard
+}

@@ -5,12 +5,14 @@ import { BadgeStato, ImmagineAuto, PulsantePreferito, SpecificheAuto } from './P
 
 export interface PropsCardAuto {
   auto: AutoCard
-  // Il cuore compare solo se viene passato onPreferito (utente loggato)
+  // Il cuore compare solo se viene passato onPreferito
   preferito?: boolean
   onPreferito?: () => void
+  // Salvataggio/rimozione in corso: cuore disabilitato
+  inCorso?: boolean
 }
 
-export function CardAuto({ auto, preferito = false, onPreferito }: PropsCardAuto) {
+export function CardAuto({ auto, preferito = false, onPreferito, inCorso = false }: PropsCardAuto) {
   const titolo = `${auto.marca} ${auto.modello}`
   const dettaglio = `/auto/${auto.id}`
 
@@ -23,7 +25,7 @@ export function CardAuto({ auto, preferito = false, onPreferito }: PropsCardAuto
           </Link>
           <BadgeStato stato={auto.stato} className="absolute top-3 left-3" />
           {onPreferito && (
-            <PulsantePreferito attivo={preferito} onClick={onPreferito} sovrapposto className="absolute top-3 right-3" />
+            <PulsantePreferito attivo={preferito} onClick={onPreferito} disabilitato={inCorso} sovrapposto className="absolute top-3 right-3" />
           )}
         </div>
         <div className="space-y-3 p-5">

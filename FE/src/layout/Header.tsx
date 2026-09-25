@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router'
 import { useAuth } from '../auth/authState'
+import { usePreferiti } from '../preferiti/preferitiState'
 import { Icona } from '../components/Icona'
 import { PulsanteTema } from '../tema/PulsanteTema'
 
@@ -12,6 +13,7 @@ function classeLink({ isActive }: { isActive: boolean }) {
 
 export function Header() {
   const { utente, logout } = useAuth()
+  const { preferiti } = usePreferiti()
   const isAdmin = utente?.ruolo === 'ADMIN' || utente?.ruolo === 'SUPER_ADMIN'
 
   return (
@@ -39,6 +41,11 @@ export function Header() {
               <NavLink to="/preferiti" className={classeLink}>
                 <Icona nome="favorite" className="text-base" />
                 <span className="hidden md:inline">Preferiti</span>
+                {preferiti && preferiti.length > 0 && (
+                  <span className="rounded-full bg-blue-50 px-1.5 text-[11px] font-bold text-blue-700 dark:border dark:border-blue-800/60 dark:bg-blue-950 dark:text-blue-300">
+                    {preferiti.length}
+                  </span>
+                )}
               </NavLink>
             )}
             {isAdmin && (

@@ -4,7 +4,7 @@ import type { PropsCardAuto } from './CardAuto'
 import { BadgeStato, ImmagineAuto, PulsantePreferito, SpecificheAuto } from './PartiAuto'
 
 // Prima auto della pagina: card orizzontale a tutta larghezza, sopra la griglia 3x3 delle altre 9
-export function CardAutoEvidenza({ auto, preferito = false, onPreferito }: PropsCardAuto) {
+export function CardAutoEvidenza({ auto, preferito = false, onPreferito, inCorso = false }: PropsCardAuto) {
   const titolo = `${auto.marca} ${auto.modello}`
   const dettaglio = `/auto/${auto.id}`
 
@@ -24,7 +24,7 @@ export function CardAutoEvidenza({ auto, preferito = false, onPreferito }: Props
         <div>
           <div className="mb-4 flex items-center justify-between">
             <BadgeStato stato={auto.stato} />
-            {onPreferito && <PulsantePreferito attivo={preferito} onClick={onPreferito} />}
+            {onPreferito && <PulsantePreferito attivo={preferito} onClick={onPreferito} disabilitato={inCorso} />}
           </div>
           <h2 className="text-2xl font-bold transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
             <Link to={dettaglio}>{titolo}</Link>

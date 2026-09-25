@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { dettaglioAuto } from '../api/auto'
 import { messaggioErrore } from '../api/client'
-import type { AutoDettaglio } from '../api/types'
+import type { AutoCard, AutoDettaglio } from '../api/types'
 import { GalleriaAuto } from '../components/auto/GalleriaAuto'
 import { BadgeStato, SpecificheAuto } from '../components/auto/PartiAuto'
 import { SchedaTecnica } from '../components/auto/SchedaTecnica'
 import { Icona } from '../components/Icona'
+import { BoxAvviso } from '../preferiti/BoxAvviso'
+import { usePreferiti } from '../preferiti/preferitiState'
 import { formattaData, formattaPrezzo } from '../utils/formatta'
 
 interface Risultato {
@@ -84,6 +86,7 @@ export function DettaglioAuto() {
               </p>
               <p className="text-4xl font-extrabold">{formattaPrezzo(auto.prezzo)}</p>
             </div>
+            <AzioniPreferito auto={auto} />
             <p className="text-center text-xs text-slate-500 dark:text-slate-400">
               Annuncio pubblicato il {formattaData(auto.createdAt)}
             </p>
@@ -119,6 +122,49 @@ function Scheletro() {
         <div className={`${blocco} h-96`} />
       </div>
       <div className={`${blocco} h-48`} />
+    </div>
+  )
+}
+
+// Pulsante preferiti e, se l'auto e' salvata, box dell'avviso di prezzo (l'avviso si lega al preferito)
+function AzioniPreferito({ auto }: { auto: AutoDettaglio }) {
+  const { preferitoDi, inCorso, alternaPreferito } = usePreferiti()
+  const preferito = preferitoDi(auto.id)
+  const card: AutoCard = {
+    id: auto.id,
+    marca: auto.marca,
+    modello: auto.modello,
+    anno: auto.anno,
+    carburante: auto.carburante,
+    km: auto.km,
+    prezzo: auto.prezzo,
+    stato: auto.stato,
+    immaginePrincipale: auto.immagini[0] ?? null,
+  }
+
+  return (
+    <div className="space-y-5">
+      <button
+        type="button"
+        onClick={() => void alternaPreferito(card)}
+        disabled={inCorso(auto.id)}
+        aria-pressed={preferito !== undefined}
+        className={`flex w-full items-center justify-center gap-2 rounded-lg border py-3 text-sm font-semibold transition-colors disabled:cursor-wait disabled:opacity-60 ${
+          preferito
+            ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100 dark:border-red-900/60 dark:bg-red-950/30 dark:text-red-300'
+            : 'border-slate-200 hover:bg-slate-50 dark:border-notte-bordo dark:hover:bg-notte-hover'
+        }`}
+      >
+        <Icona nome="favorite" piena={preferito !== undefined} className="text-xl" />
+        {preferito ? 'Nei preferiti' : 'Aggiungi ai preferiti'}
+      </button>
+      {preferito ? (
+        <BoxAvviso preferito={preferito} />
+      ) : (
+        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+          Salvala nei preferiti per impostare un avviso di prezzo.
+        </p>
+      )}
     </div>
   )
 }
