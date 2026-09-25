@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { StatoAuto } from '../../api/types'
 import { ETICHETTA_STATO, formattaKm } from '../../utils/formatta'
 import { Icona } from '../Icona'
@@ -53,9 +54,13 @@ export function PulsantePreferito({
   )
 }
 
-// Immagine dell'auto con segnaposto se l'annuncio non ha foto
+// Immagine dell'auto con segnaposto se l'annuncio non ha foto o se la foto non si carica
+// (auto.dev a volte restituisce URL che il suo server foto rifiuta)
 export function ImmagineAuto({ src, alt }: { src: string | null; alt: string }) {
-  if (!src) {
+  // Si ricorda quale src e' fallito: se cambia la foto, si riprova
+  const [rotta, setRotta] = useState<string | null>(null)
+
+  if (!src || rotta === src) {
     return (
       <div className="flex size-full items-center justify-center bg-slate-100 text-slate-400 dark:bg-slate-900 dark:text-slate-600">
         <Icona nome="directions_car" className="text-6xl" />
@@ -67,6 +72,7 @@ export function ImmagineAuto({ src, alt }: { src: string | null; alt: string }) 
       src={src}
       alt={alt}
       loading="lazy"
+      onError={() => setRotta(src)}
       className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
     />
   )
