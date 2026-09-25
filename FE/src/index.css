@@ -23,6 +23,11 @@
   body {
     @apply bg-slate-50 text-slate-900 antialiased dark:bg-notte-sfondo dark:text-slate-100;
   }
+  /* Edge aggiunge il proprio occhio ai campi password: resta solo quello di CampoTesto */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
 }
 
 /* Icone Material Symbols (le stesse usate da Stitch) */
