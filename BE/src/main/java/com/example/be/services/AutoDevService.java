@@ -119,7 +119,8 @@ public class AutoDevService {
                 statoSuggerito(a),
                 a.venditore(),
                 descrizione,
-                a.schedaTecnica(),
+                // Anteprima in italiano; all'import si salva questa (DizionarioAuto e' idempotente)
+                DizionarioAuto.schedaInItaliano(a.schedaTecnica()),
                 a.foto()
         );
     }

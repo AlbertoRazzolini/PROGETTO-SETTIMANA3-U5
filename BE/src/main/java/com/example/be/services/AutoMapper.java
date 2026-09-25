@@ -51,7 +51,8 @@ public class AutoMapper {
             return null;
         }
         try {
-            return objectMapper.readTree(a.getSchedaTecnica());
+            // In uscita i valori noti sono sempre in italiano, anche per le auto importate prima della traduzione
+            return DizionarioAuto.schedaInItaliano(objectMapper.readTree(a.getSchedaTecnica()));
         } catch (JacksonException e) {
             return null;
         }

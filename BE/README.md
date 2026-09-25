@@ -166,6 +166,9 @@ Un utente senza token riceve **401**; un utente autenticato senza il ruolo richi
 **Da USA a Italia** (una sola volta, all'import): prezzo USD → EUR con tasso fisso
 (`app.cambio.usd-eur`), miglia → km, carburante con dizionario fisso, descrizione del venditore
 tradotta con MyMemory oppure, se assente, generata direttamente in italiano dalla scheda tecnica.
+Anche i valori della scheda tecnica (carrozzeria, cambio, trazione, motore, colori base) passano da un dizionario
+fisso (`DizionarioAuto`); allestimenti e nomi commerciali dei colori restano originali. La traduzione è applicata
+in uscita, quindi vale anche per le auto importate prima.
 Il risultato è salvato nel DB come bozza e l'admin può correggerlo prima di pubblicare.
 
 ---
@@ -188,4 +191,5 @@ Il risultato è salvato nel DB come bozza e l'admin può correggerlo prima di pu
 ./mvnw test
 ```
 Test unitari su generazione descrizione, template mail (incluso escape del nome), whitelist di ordinamento,
-anteprime auto.dev in memoria e regola della soglia degli avvisi (deve stare sotto il prezzo attuale).
+anteprime auto.dev in memoria, regola della soglia degli avvisi (deve stare sotto il prezzo attuale),
+traduzione della scheda tecnica e log senza email negli errori esterni.
