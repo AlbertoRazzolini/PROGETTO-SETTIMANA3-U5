@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router'
+import { Link, NavLink, useNavigate } from 'react-router'
 import { useAuth } from '../auth/authState'
 import { useNotifiche } from '../notifiche/notificheState'
 import { usePreferiti } from '../preferiti/preferitiState'
@@ -14,6 +14,7 @@ function classeLink({ isActive }: { isActive: boolean }) {
 
 export function Header() {
   const { utente, logout } = useAuth()
+  const navigate = useNavigate()
   const { preferiti } = usePreferiti()
   const { nonLette } = useNotifiche()
   const isAdmin = utente?.ruolo === 'ADMIN' || utente?.ruolo === 'SUPER_ADMIN'
@@ -82,7 +83,12 @@ export function Header() {
                 <span className="hidden max-w-40 truncate text-sm font-semibold lg:inline">{utente.nome}</span>
                 <button
                   type="button"
-                  onClick={logout}
+                  onClick={() => {
+                    // Uscita volontaria: sempre in vetrina, anche da una pagina riservata
+                    // (senza, RottaProtetta porterebbe al login come per una sessione scaduta)
+                    logout()
+                    navigate('/', { replace: true })
+                  }}
                   className="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-slate-100 dark:border-notte-bordo dark:hover:bg-notte-hover"
                 >
                   <Icona nome="logout" className="text-lg" />
