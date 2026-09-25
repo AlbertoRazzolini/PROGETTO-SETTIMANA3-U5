@@ -43,15 +43,15 @@ export function GalleriaAuto({ immagini, titolo }: { immagini: string[]; titolo:
       </div>
 
       {totale > 1 && (
-        <div className="grid grid-cols-5 gap-3">
+        <div className="flex snap-x gap-3 overflow-x-auto pb-1">
           {immagini.map((src, i) => (
             <button
-              key={src}
+              key={`${i}-${src}`}
               type="button"
               onClick={() => setIndice(i)}
               aria-label={`Mostra foto ${i + 1}`}
               aria-current={i === indice}
-              className={`aspect-[4/3] overflow-hidden rounded-lg border-2 transition-all ${
+              className={`aspect-[4/3] w-[calc((100%-3rem)/5)] min-w-20 shrink-0 snap-start overflow-hidden rounded-lg border-2 transition-all ${
                 i === indice
                   ? 'border-blue-600 ring-2 ring-blue-600/20 dark:border-blue-500'
                   : 'border-transparent opacity-80 hover:opacity-100'

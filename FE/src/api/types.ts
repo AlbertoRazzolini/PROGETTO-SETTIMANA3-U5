@@ -102,3 +102,61 @@ export interface Notifica {
   marca: string
   modello: string
 }
+
+export type StatoPubblicazione = 'BOZZA' | 'PUBBLICATO'
+
+// Vista admin: comprende le bozze, che possono avere campi ancora vuoti
+export interface AutoAdmin {
+  id: string
+  listingId: string | null
+  vin: string
+  marca: string
+  modello: string
+  anno: number
+  carburante: string
+  descrizione: string | null
+  schedaTecnica: Record<string, unknown> | null
+  immagini: string[]
+  km: number | null
+  prezzo: number | null
+  stato: StatoAuto | null
+  statoPubblicazione: StatoPubblicazione
+  createdAt: string
+  updatedAt: string
+}
+
+export interface AutoUpdate {
+  km: number
+  prezzo: number
+  stato: StatoAuto
+  descrizione: string
+}
+
+export interface AnnuncioAutoDev {
+  listingId: string
+  marca: string
+  modello: string
+  anno: number
+  carburante: string | null
+  prezzoUsd: number | null
+  miglia: number | null
+  usato: boolean | null
+  immaginePrincipale: string | null
+}
+
+export interface AnteprimaAnnuncio {
+  listingId: string
+  vin: string
+  marca: string
+  modello: string
+  anno: number
+  carburante: string | null
+  prezzoUsd: number | null
+  prezzoEur: number | null
+  km: number | null
+  statoSuggerito: StatoAuto | null
+  venditore: string | null
+  descrizione: string | null
+  schedaTecnica: Record<string, unknown> | null
+  foto: string[]
+}
