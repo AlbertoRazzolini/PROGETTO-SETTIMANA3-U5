@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import tools.jackson.databind.exc.MismatchedInputException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -61,6 +62,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handleBodyIllegibile(HttpMessageNotReadableException ex) {
+        // Valore di tipo sbagliato in un campo (es. "stato":"ROTTO" o "km":"abc"): si indica quale campo
+        if (ex.getCause() instanceof MismatchedInputException mie && !mie.getPath().isEmpty()) {
+            String campo = mie.getPath().getLast().getPropertyName();
+            if (campo != null) {
+                return new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        "Dati non validi", Map.of(campo, "Valore non valido"));
+            }
+        }
         return errore(HttpStatus.BAD_REQUEST, "Corpo della richiesta mancante o non valido");
     }
 

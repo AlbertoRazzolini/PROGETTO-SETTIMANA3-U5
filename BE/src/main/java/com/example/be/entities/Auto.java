@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -61,7 +62,9 @@ public class Auto {
     @Column(name = "scheda_tecnica", columnDefinition = "jsonb")
     private String schedaTecnica;
 
+    // BatchSize: in un elenco paginato le immagini di piu' auto si caricano con poche query invece di una per auto
     @ElementCollection
+    @BatchSize(size = 20)
     @CollectionTable(name = "auto_immagini", joinColumns = @JoinColumn(name = "auto_id"))
     @OrderColumn(name = "posizione")
     @Column(name = "url", nullable = false, length = 1000)
