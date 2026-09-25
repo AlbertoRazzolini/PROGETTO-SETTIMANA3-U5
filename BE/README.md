@@ -175,6 +175,8 @@ Il risultato è salvato nel DB come bozza e l'admin può correggerlo prima di pu
 - Input sempre tramite **DTO** validati: campi come `ruolo`, `userId`, `attivo` aggiunti al body vengono ignorati.
 - Ruolo deciso dal server; nel **JWT** solo id utente e ruolo. Il ruolo viene riletto dal DB a ogni richiesta.
 - **Password** solo come hash BCrypt; mai restituite né scritte nei log (nei log solo id, mai email).
+  Degli errori esterni (SMTP, auto.dev, traduzione) si registra solo il tipo e lo status HTTP, mai il testo:
+  il server di posta ripete l'indirizzo del destinatario e le risposte di auto.dev contengono l'email dell'account.
 - Preferiti, avvisi e notifiche cercati per **id + proprietario**: la risorsa di un altro utente risponde 404.
 - Ricerca con **Criteria API** e parametri (jolly `%` `_` resi letterali); ordinamento da **elenco chiuso**.
 - Template mail con solo `th:text`/`th:href` (escape automatico); link di disattivazione con **token casuale monouso**.

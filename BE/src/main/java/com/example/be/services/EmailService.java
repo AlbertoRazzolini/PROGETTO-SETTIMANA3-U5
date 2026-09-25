@@ -1,5 +1,6 @@
 package com.example.be.services;
 
+import com.example.be.exceptions.ErroriPerLog;
 import com.example.be.dto.mail.MailSogliaPrezzoDto;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -61,7 +62,8 @@ public class EmailService {
             mailSender.send(messaggio);
             log.info("Mail soglia prezzo inviata (avviso id {})", dati.avvisoId());
         } catch (MessagingException | MailException e) {
-            log.warn("Invio mail soglia prezzo fallito (avviso id {}): {}", dati.avvisoId(), e.getMessage());
+            // Solo il tipo di errore: il messaggio SMTP spesso contiene l'indirizzo del destinatario
+            log.warn("Invio mail soglia prezzo fallito (avviso id {}): {}", dati.avvisoId(), ErroriPerLog.descrivi(e));
         }
     }
 

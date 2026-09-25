@@ -1,5 +1,6 @@
 package com.example.be.external;
 
+import com.example.be.exceptions.ErroriPerLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,7 @@ public class TraduzioneService {
             // MyMemory a volte restituisce entita' HTML (es. &#39;): si salva testo semplice
             return HtmlUtils.htmlUnescape(tradotto);
         } catch (RestClientException e) {
-            log.warn("Servizio di traduzione non raggiungibile, uso il testo originale: {}", e.getMessage());
+            log.warn("Servizio di traduzione non raggiungibile, uso il testo originale: {}", ErroriPerLog.descrivi(e));
             return blocco;
         }
     }

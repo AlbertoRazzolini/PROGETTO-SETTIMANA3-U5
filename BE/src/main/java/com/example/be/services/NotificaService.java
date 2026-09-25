@@ -1,5 +1,6 @@
 package com.example.be.services;
 
+import com.example.be.exceptions.ErroriPerLog;
 import com.example.be.dto.PaginaDto;
 import com.example.be.dto.notifiche.ConteggioNotificheDto;
 import com.example.be.dto.notifiche.NotificaDto;
@@ -90,7 +91,7 @@ public class NotificaService {
         try {
             messagingTemplate.convertAndSendToUser(userId, CODA_NOTIFICHE, dto);
         } catch (MessagingException e) {
-            log.warn("Invio notifica in tempo reale fallito (notifica id {}): {}", dto.id(), e.getMessage());
+            log.warn("Invio notifica in tempo reale fallito (notifica id {}): {}", dto.id(), ErroriPerLog.descrivi(e));
         }
     }
 }

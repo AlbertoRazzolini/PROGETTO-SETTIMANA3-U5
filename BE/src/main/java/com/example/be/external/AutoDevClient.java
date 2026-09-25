@@ -1,5 +1,6 @@
 package com.example.be.external;
 
+import com.example.be.exceptions.ErroriPerLog;
 import com.example.be.dto.autodev.AnnuncioAutoDevDto;
 import com.example.be.dto.autodev.AnnuncioAutoDevRiassuntoDto;
 import com.example.be.exceptions.ExternalApiException;
@@ -84,7 +85,8 @@ public class AutoDevClient {
                     .supplyAsync(() -> estraiFoto(get("/photos/{vin}", vin)), executor)
                     .join();
         } catch (CompletionException e) {
-            log.warn("Foto non disponibili da auto.dev per il VIN {}: {}", vin, e.getCause().getMessage());
+            // Mai il messaggio: il corpo della risposta di auto.dev contiene i dati dell'account (email compresa)
+            log.warn("Foto non disponibili da auto.dev per il VIN {}: {}", vin, ErroriPerLog.descrivi(e.getCause()));
             foto = new ArrayList<>();
         }
         if (foto.isEmpty()) {
@@ -201,10 +203,11 @@ public class AutoDevClient {
             return new ExternalApiException("auto.dev ha risposto con errore " + status);
         }
         if (causa instanceof ResourceAccessException) {
-            log.warn("auto.dev non raggiungibile ({}): {}", risorsa, causa.getMessage());
+            log.warn("auto.dev non raggiungibile ({}): {}", risorsa, ErroriPerLog.descrivi(causa));
             return new ExternalApiException("auto.dev non raggiungibile");
         }
-        log.error("Errore imprevisto nella chiamata ad auto.dev ({})", risorsa, causa);
+        // Niente stack trace: il messaggio (es. errore di parsing) puo' riportare pezzi della risposta con i dati dell'account
+        log.error("Errore imprevisto nella chiamata ad auto.dev ({}): {}", risorsa, ErroriPerLog.descrivi(causa));
         return new ExternalApiException("Errore nella comunicazione con auto.dev", causa);
     }
 
