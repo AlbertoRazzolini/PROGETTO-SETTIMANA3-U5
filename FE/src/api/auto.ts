@@ -1,5 +1,5 @@
 import { api } from './client'
-import type { AutoCard, Pagina, StatoAuto } from './types'
+import type { AutoCard, AutoDettaglio, Pagina, StatoAuto } from './types'
 
 export interface FiltriAuto {
   q?: string
@@ -44,5 +44,10 @@ export const MIN_LETTERE_SUGGERIMENTI = 3
 
 export async function suggerimentiAuto(q: string, signal?: AbortSignal): Promise<string[]> {
   const { data } = await api.get<string[]>('/auto/suggerimenti', { params: { q }, signal })
+  return data
+}
+
+export async function dettaglioAuto(id: string, signal?: AbortSignal): Promise<AutoDettaglio> {
+  const { data } = await api.get<AutoDettaglio>(`/auto/${encodeURIComponent(id)}`, { signal })
   return data
 }

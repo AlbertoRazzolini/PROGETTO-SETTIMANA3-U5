@@ -22,3 +22,10 @@ export const ETICHETTA_STATO: Record<StatoAuto, string> = {
   KM_0: 'Km 0',
   USATO: 'Usato',
 }
+
+const formatoData = new Intl.DateTimeFormat('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' })
+
+// "2026-09-12T10:00:00Z" -> "12/09/2026"
+export function formattaData(iso: string): string {
+  return formatoData.format(new Date(iso))
+}

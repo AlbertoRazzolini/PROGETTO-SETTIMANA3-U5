@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router'
 import { Layout } from './layout/Layout'
+import { DettaglioAuto } from './pages/DettaglioAuto'
 import { Vetrina } from './pages/Vetrina'
 
 function InCostruzione() {
@@ -11,6 +12,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Vetrina />} />
+        <Route path="auto/:id" element={<DettaglioAuto />} />
         <Route path="*" element={<InCostruzione />} />
       </Route>
     </Routes>
