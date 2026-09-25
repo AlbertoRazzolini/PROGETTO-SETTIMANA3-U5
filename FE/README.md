@@ -57,7 +57,7 @@ Copiare `.env.example` in `.env` solo se il back-end non è su `localhost:8080`:
 | `/preferiti` | utenti | Auto salvate con box dell'avviso di prezzo (crea, modifica soglia, elimina) |
 | `/notifiche` | utenti | Storico notifiche, filtro non lette, segna come lette |
 | `/admin` | ADMIN, SUPER_ADMIN | Annunci con bozze: modifica (prezzo, km, stato, descrizione), pubblica, metti in bozza |
-| `/admin/importa` | ADMIN, SUPER_ADMIN | Ricerca su auto.dev, anteprima già in euro/km/italiano, import come bozza |
+| `/admin/importa` | ADMIN, SUPER_ADMIN | Ricerca su auto.dev a pagine (fino a 20 risultati, 1 chiamata per pagina), anteprima già in euro/km/italiano, import come bozza di uno o più annunci selezionati |
 | `/admin/utenti` | SUPER_ADMIN | Elenco utenti per ruolo e cambio ruolo (non il proprio) |
 | qualsiasi altra | tutti | Pagina 404 |
 

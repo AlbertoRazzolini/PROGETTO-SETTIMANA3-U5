@@ -40,9 +40,10 @@ export async function mettiInBozza(id: string): Promise<AutoAdmin> {
 
 // ---- Import da auto.dev: ogni chiamata consuma crediti ----
 
-export async function cercaAnnunciAutoDev(make: string, model: string, limit: number): Promise<AnnuncioAutoDev[]> {
+// page parte da 1 (come su auto.dev); ogni pagina costa 1 chiamata
+export async function cercaAnnunciAutoDev(make: string, model: string, limit: number, page: number): Promise<AnnuncioAutoDev[]> {
   const { data } = await api.get<AnnuncioAutoDev[]>('/admin/autodev/listings', {
-    params: { make: make || undefined, model: model || undefined, limit },
+    params: { make: make || undefined, model: model || undefined, limit, page },
   })
   return data
 }
