@@ -20,7 +20,7 @@ export function GalleriaAuto({ immagini, titolo }: { immagini: string[]; titolo:
     'absolute top-1/2 flex size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md transition-colors hover:bg-white dark:bg-slate-900/80 dark:text-slate-100 dark:hover:bg-slate-900'
 
   return (
-    <div className="space-y-4">
+    <div className="min-w-0 space-y-4">
       <div className="relative aspect-video overflow-hidden rounded-xl border border-slate-200 bg-slate-100 dark:border-notte-bordo dark:bg-slate-900">
         <img
           src={immagini[indice]}
@@ -51,7 +51,7 @@ export function GalleriaAuto({ immagini, titolo }: { immagini: string[]; titolo:
               onClick={() => setIndice(i)}
               aria-label={`Mostra foto ${i + 1}`}
               aria-current={i === indice}
-              className={`aspect-[4/3] w-[calc((100%-3rem)/5)] min-w-20 shrink-0 snap-start overflow-hidden rounded-lg border-2 transition-all ${
+              className={`aspect-[4/3] w-24 shrink-0 snap-start sm:w-28 overflow-hidden rounded-lg border-2 transition-all ${
                 i === indice
                   ? 'border-blue-600 ring-2 ring-blue-600/20 dark:border-blue-500'
                   : 'border-transparent opacity-80 hover:opacity-100'

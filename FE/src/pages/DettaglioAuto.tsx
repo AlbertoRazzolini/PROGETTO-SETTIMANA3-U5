@@ -70,7 +70,7 @@ export function DettaglioAuto() {
         </span>
       </nav>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[3fr_2fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <GalleriaAuto key={auto.id} immagini={auto.immagini} titolo={titolo} />
 
         <aside className="lg:sticky lg:top-28 lg:self-start">
@@ -117,7 +117,7 @@ function Scheletro() {
   return (
     <div className="space-y-8" aria-busy="true" aria-label="Caricamento">
       <div className={`${blocco} h-5 w-48`} />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[3fr_2fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <div className={`${blocco} aspect-video`} />
         <div className={`${blocco} h-96`} />
       </div>

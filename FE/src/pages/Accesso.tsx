@@ -36,7 +36,7 @@ export function Accesso({ scheda }: { scheda: Scheda }) {
     }`
 
   return (
-    <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-8 lg:grid-cols-[1fr_minmax(0,460px)]">
+    <div className="mx-auto grid max-w-5xl grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)]">
       <aside className="hidden overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm lg:block dark:border-notte-bordo dark:bg-notte-card">
         <div className="flex h-48 items-end bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 p-6 text-white">
           <span className="flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-bold tracking-wider backdrop-blur">

@@ -124,7 +124,7 @@ export function Vetrina() {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <FiltriVetrina
             key={JSON.stringify(valoriFiltri)}
@@ -137,7 +137,7 @@ export function Vetrina() {
         <section className="min-w-0 space-y-6" aria-busy={caricamento}>
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-sm dark:border-notte-bordo dark:bg-notte-card">
             <p className="text-sm font-semibold" aria-live="polite">
-              {caricamento ? 'Ricerca in corso...' : pagina ? `${pagina.totaleElementi} auto trovate` : ''}
+              {caricamento ? 'Ricerca in corso...' : pagina ? pagina.totaleElementi === 1 ? '1 auto trovata' : `${pagina.totaleElementi} auto trovate` : ''}
             </p>
             <label className="flex items-center gap-2 text-sm">
               <span className="text-slate-500 dark:text-slate-400">Ordina per</span>

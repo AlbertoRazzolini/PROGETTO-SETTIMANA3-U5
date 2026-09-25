@@ -27,6 +27,12 @@
 
 /* Icone Material Symbols (le stesse usate da Stitch) */
 .icona {
+  /* Box fisso di 1em: finche' il font non e' caricato il nome dell'icona non allarga il layout */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  flex-shrink: 0;
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
