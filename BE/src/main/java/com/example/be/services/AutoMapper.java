@@ -1,6 +1,8 @@
 package com.example.be.services;
 
 import com.example.be.dto.auto.AutoAdminDto;
+import com.example.be.dto.auto.AutoCardDto;
+import com.example.be.dto.auto.AutoDettaglioDto;
 import com.example.be.entities.Auto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,22 @@ public class AutoMapper {
                 a.getCarburante(), a.getDescrizione(), schedaTecnica(a), List.copyOf(a.getImmagini()),
                 a.getKm(), a.getPrezzo(), a.getStato(), a.getStatoPubblicazione(),
                 a.getCreatedAt(), a.getUpdatedAt()
+        );
+    }
+
+    public AutoCardDto toCardDto(Auto a) {
+        return new AutoCardDto(
+                a.getId(), a.getMarca(), a.getModello(), a.getAnno(), a.getCarburante(),
+                a.getKm(), a.getPrezzo(), a.getStato(),
+                a.getImmagini().isEmpty() ? null : a.getImmagini().getFirst()
+        );
+    }
+
+    public AutoDettaglioDto toDettaglioDto(Auto a) {
+        return new AutoDettaglioDto(
+                a.getId(), a.getVin(), a.getMarca(), a.getModello(), a.getAnno(), a.getCarburante(),
+                a.getDescrizione(), schedaTecnica(a), List.copyOf(a.getImmagini()),
+                a.getKm(), a.getPrezzo(), a.getStato(), a.getCreatedAt()
         );
     }
 
