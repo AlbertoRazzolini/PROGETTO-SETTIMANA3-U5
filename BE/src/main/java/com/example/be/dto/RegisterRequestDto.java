@@ -10,15 +10,14 @@ import jakarta.validation.constraints.Size;
 // il ruolo lo decide il server (sempre USER).
 public record RegisterRequestDto(
 
-        // Solo lettere (anche accentate), spazi, apostrofi e trattini: il nome finisce anche nelle mail
         @NotBlank(message = "Il nome e' obbligatorio")
         @Size(max = 50, message = "Il nome puo' avere al massimo 50 caratteri")
-        @Pattern(regexp = "^[\\p{L}][\\p{L} '\\-]*$", message = "Il nome contiene caratteri non ammessi")
+        @Pattern(regexp = Validazione.NOME_REGEX, message = "Il nome contiene caratteri non ammessi")
         String nome,
 
         @NotBlank(message = "Il cognome e' obbligatorio")
         @Size(max = 50, message = "Il cognome puo' avere al massimo 50 caratteri")
-        @Pattern(regexp = "^[\\p{L}][\\p{L} '\\-]*$", message = "Il cognome contiene caratteri non ammessi")
+        @Pattern(regexp = Validazione.NOME_REGEX, message = "Il cognome contiene caratteri non ammessi")
         String cognome,
 
         @NotBlank(message = "L'email e' obbligatoria")
@@ -29,7 +28,7 @@ public record RegisterRequestDto(
         // Max 72: BCrypt considera solo i primi 72 byte, oltre verrebbero ignorati in silenzio
         @NotBlank(message = "La password e' obbligatoria")
         @Size(min = 8, max = 72, message = "La password deve avere tra 8 e 72 caratteri")
-        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d).+$", message = "La password deve contenere almeno una lettera e un numero")
+        @Pattern(regexp = Validazione.PASSWORD_REGEX, message = "La password deve contenere almeno una lettera e un numero")
         String password
 ) {
 }
