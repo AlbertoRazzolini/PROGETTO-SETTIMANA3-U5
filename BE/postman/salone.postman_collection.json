@@ -1923,6 +1923,50 @@
           ]
         },
         {
+          "name": "Soglia uguale o sopra il prezzo attuale -> 400",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/avvisi/{{avvisoId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenUser}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"soglia\": 99999.0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Messaggio sulla soglia\", () => pm.expect(pm.response.json().messaggio).to.include(\"inferiore al prezzo attuale\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
           "name": "Soglia non valida -> 400",
           "request": {
             "method": "PUT",

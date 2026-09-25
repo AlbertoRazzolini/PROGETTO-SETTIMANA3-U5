@@ -172,6 +172,13 @@ Content-Type: application/json
 
 {"soglia": 25000.00}
 
+### Soglia uguale o sopra il prezzo attuale -> 400 (l'avviso serve per un ribasso)
+PUT {{api}}/avvisi/{{avvisoId}}
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"soglia": 99999.00}
+
 ### L'admin prova a modificare l'avviso dell'utente -> 404 (non sa nemmeno che esiste)
 PUT {{api}}/avvisi/{{avvisoId}}
 Authorization: Bearer {{tokenAdmin}}

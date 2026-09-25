@@ -8,12 +8,15 @@ import { usePreferiti } from './preferitiState'
 // Stessi limiti del BE (AvvisoCreateDto): > 0, max 7 cifre intere e 2 decimali
 const SOGLIA_REGEX = /^\d{1,7}([.,]\d{1,2})?$/
 
-function leggiSoglia(testo: string): number | string {
+// La soglia deve stare sotto il prezzo attuale: l'avviso segnala un ribasso (stessa regola del BE)
+function leggiSoglia(testo: string, prezzo: number): number | string {
   const t = testo.trim()
   if (!t) return 'Inserisci una soglia'
   if (!SOGLIA_REGEX.test(t)) return 'Soglia non valida (max 7 cifre intere e 2 decimali)'
   const n = Number(t.replace(',', '.'))
-  return n > 0 ? n : 'La soglia deve essere maggiore di zero'
+  if (n <= 0) return 'La soglia deve essere maggiore di zero'
+  if (n >= prezzo) return `La soglia deve essere inferiore al prezzo attuale (${formattaPrezzo(prezzo)})`
+  return n
 }
 
 function PillolaStato({ avviso }: { avviso: Avviso }) {
@@ -45,7 +48,7 @@ export function BoxAvviso({ preferito, compatto = false }: { preferito: Preferit
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
-    const soglia = leggiSoglia(testo)
+    const soglia = leggiSoglia(testo, preferito.auto.prezzo)
     if (typeof soglia === 'string') {
       setErrore(soglia)
       return
@@ -139,9 +142,13 @@ export function BoxAvviso({ preferito, compatto = false }: { preferito: Preferit
               {avviso ? 'Salva' : 'Crea avviso'}
             </button>
           </div>
-          {errore && (
+          {errore ? (
             <p role="alert" className="text-sm text-red-600 dark:text-red-400">
               {errore}
+            </p>
+          ) : (
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Deve essere inferiore al prezzo attuale di {formattaPrezzo(preferito.auto.prezzo)}.
             </p>
           )}
           {modifica && (

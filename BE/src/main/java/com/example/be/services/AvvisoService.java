@@ -9,6 +9,7 @@ import com.example.be.entities.Preferito;
 import com.example.be.entities.User;
 import com.example.be.enums.StatoPubblicazione;
 import com.example.be.events.PrezzoAutoAggiornatoEvent;
+import com.example.be.exceptions.BadRequestException;
 import com.example.be.exceptions.ConflictException;
 import com.example.be.exceptions.NotFoundException;
 import com.example.be.repositories.AvvisoRepository;
@@ -60,11 +61,10 @@ public class AvvisoService {
         if (avvisoRepository.existsByPreferitoId(preferitoId)) {
             throw new ConflictException("Esiste gia' un avviso per questa auto: modificane la soglia");
         }
+        controllaSoglia(preferito.getAuto(), soglia);
         Avviso avviso = new Avviso(preferito, soglia);
         avviso.setTokenDisattivazione(nuovoToken());
         avvisoRepository.saveAndFlush(avviso);
-        // Il prezzo potrebbe essere gia' sotto la soglia appena impostata
-        verifica(avviso);
         return toDto(avviso);
     }
 
@@ -72,12 +72,12 @@ public class AvvisoService {
     @Transactional
     public AvvisoDto aggiornaSoglia(UUID userId, UUID avvisoId, BigDecimal soglia) {
         Avviso avviso = trova(userId, avvisoId);
+        controllaSoglia(avviso.getPreferito().getAuto(), soglia);
         avviso.setSoglia(soglia);
         avviso.setAttivo(true);
         if (avviso.getTokenDisattivazione() == null) {
             avviso.setTokenDisattivazione(nuovoToken());
         }
-        verifica(avviso);
         avvisoRepository.saveAndFlush(avviso);
         return toDto(avviso);
     }
@@ -155,6 +155,20 @@ public class AvvisoService {
             }
         });
         log.info("Soglia raggiunta per avviso id {}: notifica creata e mail in invio", avviso.getId());
+    }
+
+    /**
+     * L'avviso serve a sapere quando il prezzo SCENDE: la soglia deve essere sotto il prezzo attuale.
+     * Una soglia uguale o piu' alta sarebbe gia' "raggiunta" e manderebbe subito una mail senza nessun ribasso.
+     * Per questo, dopo il salvataggio, la verifica parte solo quando l'admin cambia il prezzo (onPrezzoAggiornato).
+     */
+    private void controllaSoglia(Auto auto, BigDecimal soglia) {
+        if (auto.getPrezzo() == null) {
+            throw new BadRequestException("L'auto non ha ancora un prezzo: impossibile impostare un avviso");
+        }
+        if (soglia.compareTo(auto.getPrezzo()) >= 0) {
+            throw new BadRequestException("La soglia deve essere inferiore al prezzo attuale (" + euro(auto.getPrezzo()) + ")");
+        }
     }
 
     private Avviso trova(UUID userId, UUID avvisoId) {

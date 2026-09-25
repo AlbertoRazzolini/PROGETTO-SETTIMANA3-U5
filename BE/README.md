@@ -104,12 +104,14 @@ Le liste paginate restituiscono `{ "contenuto", "pagina", "dimensione", "totaleE
 | Metodo | Path | Status |
 |---|---|---|
 | GET | `/api/avvisi?page=` | 200 |
-| POST | `/api/avvisi` `{preferitoId, soglia}` | 201 · 404 · 409 |
-| PUT | `/api/avvisi/{id}` `{soglia}` | 200 · 404 |
+| POST | `/api/avvisi` `{preferitoId, soglia}` | 201 · 400 (soglia non inferiore al prezzo attuale) · 404 · 409 |
+| PUT | `/api/avvisi/{id}` `{soglia}` | 200 · 400 · 404 |
 | DELETE | `/api/avvisi/{id}` | 204 · 404 |
 | GET | `/api/avvisi/disattiva?token=` | **pubblico**, pagina HTML · 200 · 404 (token non valido o già usato) |
 
-**Regola di invio:** mail + notifica quando il prezzo di un'auto pubblicata scende **sotto** la soglia.
+**Regola di invio:** mail + notifica quando l'admin abbassa il prezzo di un'auto pubblicata **sotto** la soglia.
+La soglia deve essere **inferiore al prezzo attuale** (altrimenti 400): l'avviso segnala un ribasso, quindi
+non parte mai al momento della creazione.
 Per la stessa soglia l'avviso parte una sola volta; se l'utente imposta una soglia **più bassa** di quella
 già notificata e il prezzo ci scende sotto, l'avviso riparte.
 
@@ -176,4 +178,5 @@ Il risultato è salvato nel DB come bozza e l'admin può correggerlo prima di pu
 ```bash
 ./mvnw test
 ```
-Test unitari su generazione descrizione, template mail (incluso escape del nome) e whitelist di ordinamento.
+Test unitari su generazione descrizione, template mail (incluso escape del nome), whitelist di ordinamento,
+anteprime auto.dev in memoria e regola della soglia degli avvisi (deve stare sotto il prezzo attuale).
