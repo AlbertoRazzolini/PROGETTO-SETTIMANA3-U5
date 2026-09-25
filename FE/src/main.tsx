@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router'
 import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './auth/AuthContext.tsx'
+import { NotificheProvider } from './notifiche/NotificheContext.tsx'
 import { PreferitiProvider } from './preferiti/PreferitiContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
@@ -11,7 +12,9 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthProvider>
         <PreferitiProvider>
-          <App />
+          <NotificheProvider>
+            <App />
+          </NotificheProvider>
         </PreferitiProvider>
       </AuthProvider>
     </BrowserRouter>

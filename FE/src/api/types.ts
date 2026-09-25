@@ -92,3 +92,13 @@ export interface Avviso {
   updatedAt: string
   auto: AutoCard
 }
+
+export interface Notifica {
+  id: string
+  messaggio: string
+  letta: boolean
+  createdAt: string
+  autoId: string
+  marca: string
+  modello: string
+}

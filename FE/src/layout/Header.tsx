@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router'
 import { useAuth } from '../auth/authState'
+import { useNotifiche } from '../notifiche/notificheState'
 import { usePreferiti } from '../preferiti/preferitiState'
 import { Icona } from '../components/Icona'
 import { PulsanteTema } from '../tema/PulsanteTema'
@@ -14,6 +15,7 @@ function classeLink({ isActive }: { isActive: boolean }) {
 export function Header() {
   const { utente, logout } = useAuth()
   const { preferiti } = usePreferiti()
+  const { nonLette } = useNotifiche()
   const isAdmin = utente?.ruolo === 'ADMIN' || utente?.ruolo === 'SUPER_ADMIN'
 
   return (
@@ -62,10 +64,15 @@ export function Header() {
             {utente && (
               <Link
                 to="/notifiche"
-                aria-label="Notifiche"
+                aria-label={nonLette > 0 ? `Notifiche, ${nonLette} non lette` : 'Notifiche'}
                 className="relative rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-notte-hover dark:hover:text-slate-100"
               >
                 <Icona nome="notifications" className="text-xl" />
+                {nonLette > 0 && (
+                  <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white ring-2 ring-white dark:bg-red-500 dark:ring-notte-card">
+                    {nonLette > 99 ? '99+' : nonLette}
+                  </span>
+                )}
               </Link>
             )}
             <PulsanteTema />

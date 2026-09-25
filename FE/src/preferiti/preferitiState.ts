@@ -16,6 +16,8 @@ export interface PreferitiState {
   eliminaAvviso: (avviso: Avviso) => Promise<void>
   // Ultimo errore di un'azione rapida (cuore, rimozione), mostrato come messaggio a comparsa
   errore: string | null
+  // Riallinea preferiti e avvisi col server (es. dopo una notifica di prezzo cambiato)
+  ricarica: () => void
   chiudiErrore: () => void
 }
 

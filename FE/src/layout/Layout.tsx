@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router'
+import { NotificheArrivate } from '../notifiche/NotificheArrivate'
 import { ErrorePreferiti } from '../preferiti/ErrorePreferiti'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -12,6 +13,7 @@ export function Layout() {
       </main>
       <Footer />
       <ErrorePreferiti />
+      <NotificheArrivate />
     </div>
   )
 }

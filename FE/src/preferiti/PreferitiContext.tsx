@@ -146,8 +146,9 @@ export function PreferitiProvider({ children }: { children: ReactNode }) {
       eliminaAvviso,
       errore,
       chiudiErrore: () => setErrore(null),
+      ricarica,
     }),
-    [correnti, autoInCorso, alternaPreferito, rimuovi, salvaAvviso, eliminaAvviso, errore],
+    [correnti, autoInCorso, alternaPreferito, rimuovi, salvaAvviso, eliminaAvviso, errore, ricarica],
   )
 
   return <PreferitiContext value={valore}>{children}</PreferitiContext>

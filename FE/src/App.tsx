@@ -3,6 +3,7 @@ import { RottaProtetta } from './auth/RottaProtetta'
 import { Layout } from './layout/Layout'
 import { Accesso } from './pages/Accesso'
 import { DettaglioAuto } from './pages/DettaglioAuto'
+import { Notifiche } from './pages/Notifiche'
 import { Preferiti } from './pages/Preferiti'
 import { Vetrina } from './pages/Vetrina'
 
@@ -23,6 +24,14 @@ function App() {
           element={
             <RottaProtetta>
               <Preferiti />
+            </RottaProtetta>
+          }
+        />
+        <Route
+          path="notifiche"
+          element={
+            <RottaProtetta>
+              <Notifiche />
             </RottaProtetta>
           }
         />
