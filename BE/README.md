@@ -19,7 +19,12 @@ WebSocket/STOMP · Thymeleaf (template mail) · JavaMail (Gmail SMTP) · jjwt.
    ./mvnw spring-boot:run
    ```
    Le tabelle vengono create da Hibernate (`ddl-auto=update`) e il seeder crea i 3 utenti di prova.
-4. Richieste di prova pronte in [`http/salone.http`](http/salone.http) (HTTP Client di IntelliJ).
+4. Richieste di prova pronte:
+   - **Postman:** importare [`postman/salone.postman_collection.json`](postman/salone.postman_collection.json)
+     e lanciarla con il *Collection Runner*. 80 richieste in 10 cartelle; ogni richiesta verifica lo status
+     atteso (anche 400/401/403/404/409) e salva token e id nelle variabili della collection. L'ultima
+     cartella ripristina i dati, quindi si può rilanciare. La cartella *03 - auto.dev* consuma crediti API.
+   - **IntelliJ:** [`http/salone.http`](http/salone.http) (HTTP Client).
 
 ### Utenti di prova (seeder)
 
