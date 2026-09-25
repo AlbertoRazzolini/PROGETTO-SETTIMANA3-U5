@@ -82,15 +82,13 @@ public class AutoAdminService {
         return autoMapper.toAdminDto(trova(id));
     }
 
+    // Solo dati descrittivi: il prezzo passa sempre da aggiornaPrezzo (unico punto che controlla gli avvisi)
     @Transactional
     public AutoAdminDto aggiorna(UUID id, AutoUpdateDto dto) {
         Auto auto = trova(id);
-        BigDecimal prezzoPrecedente = auto.getPrezzo();
         auto.setKm(dto.km());
-        auto.setPrezzo(dto.prezzo());
         auto.setStato(dto.stato());
         auto.setDescrizione(dto.descrizione().trim());
-        segnalaSeCambiaPrezzo(auto, prezzoPrecedente);
         return salvaERispondi(auto);
     }
 

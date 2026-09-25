@@ -28,6 +28,12 @@ export async function aggiornaAuto(id: string, dati: AutoUpdate): Promise<AutoAd
   return data
 }
 
+// Unico modo per cambiare il prezzo: il BE ricontrolla gli avvisi degli utenti
+export async function aggiornaPrezzo(id: string, prezzo: number): Promise<AutoAdmin> {
+  const { data } = await api.patch<AutoAdmin>(`/admin/auto/${id}/prezzo`, { prezzo })
+  return data
+}
+
 export async function pubblicaAuto(id: string): Promise<AutoAdmin> {
   const { data } = await api.patch<AutoAdmin>(`/admin/auto/${id}/pubblica`)
   return data

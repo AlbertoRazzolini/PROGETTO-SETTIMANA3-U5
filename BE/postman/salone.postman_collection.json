@@ -910,7 +910,7 @@
           ]
         },
         {
-          "name": "Modifica completa",
+          "name": "Modifica dettagli (km, stato, descrizione)",
           "request": {
             "method": "PUT",
             "header": [
@@ -932,7 +932,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"km\": 15000,\n  \"prezzo\": 33900.0,\n  \"stato\": \"USATO\",\n  \"descrizione\": \"Subaru Outback Limited 2025 in ottime condizioni.\"\n}",
+              "raw": "{\n  \"km\": 15000,\n  \"stato\": \"USATO\",\n  \"descrizione\": \"Subaru Outback Limited 2025 in ottime condizioni.\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -947,6 +947,50 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prezzo nel PUT ignorato",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/auto/{{autoId}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"km\": 15000,\n  \"prezzo\": 1,\n  \"stato\": \"USATO\",\n  \"descrizione\": \"Subaru Outback Limited 2025 in ottime condizioni.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Prezzo non cambiato dal PUT\", () => pm.expect(pm.response.json().prezzo).to.not.eql(1));"
                 ]
               }
             }
@@ -975,7 +1019,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"km\": 1000000,\n  \"prezzo\": 12345678.123,\n  \"stato\": \"USATO\",\n  \"descrizione\": \"\"\n}",
+              "raw": "{\n  \"km\": 1000000,\n  \"stato\": \"USATO\",\n  \"descrizione\": \"\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -990,7 +1034,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
-                  "pm.test(\"Errori su km, prezzo, descrizione\", () => pm.expect(pm.response.json().campi).to.have.keys(\"km\",\"prezzo\",\"descrizione\"));"
+                  "pm.test(\"Errori su km e descrizione\", () => pm.expect(pm.response.json().campi).to.have.keys(\"km\",\"descrizione\"));"
                 ]
               }
             }
@@ -1019,7 +1063,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"km\": 1000,\n  \"prezzo\": 100,\n  \"stato\": \"ROTTO\",\n  \"descrizione\": \"x\"\n}",
+              "raw": "{\n  \"km\": 1000,\n  \"stato\": \"ROTTO\",\n  \"descrizione\": \"x\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1159,6 +1203,50 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Prezzo non valido -> 400",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/admin/auto/{{autoId}}/prezzo",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{tokenAdmin}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prezzo\": 12345678.123\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"Errore sul prezzo\", () => pm.expect(pm.response.json().campi).to.have.keys(\"prezzo\"));"
                 ]
               }
             }

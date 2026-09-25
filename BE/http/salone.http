@@ -97,7 +97,7 @@ PUT {{api}}/admin/auto/{{autoId}}
 Authorization: Bearer {{tokenAdmin}}
 Content-Type: application/json
 
-{"km": 15000, "prezzo": 33900.00, "stato": "USATO", "descrizione": "Subaru Outback Limited 2025 in ottime condizioni."}
+{"km": 15000, "stato": "USATO", "descrizione": "Subaru Outback Limited 2025 in ottime condizioni."}
 
 ### Pubblica (200)
 PATCH {{api}}/admin/auto/{{autoId}}/pubblica

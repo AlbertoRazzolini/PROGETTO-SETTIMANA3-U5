@@ -125,9 +125,9 @@ export interface AutoAdmin {
   updatedAt: string
 }
 
+// PUT dei dettagli: il prezzo non c'e', si cambia solo con aggiornaPrezzo
 export interface AutoUpdate {
   km: number
-  prezzo: number
   stato: StatoAuto
   descrizione: string
 }

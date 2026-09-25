@@ -21,7 +21,7 @@ WebSocket/STOMP · Thymeleaf (template mail) · JavaMail (Gmail SMTP) · jjwt.
    Le tabelle vengono create da Hibernate (`ddl-auto=update`) e il seeder crea i 3 utenti di prova.
 4. Richieste di prova pronte:
    - **Postman:** importare [`postman/salone.postman_collection.json`](postman/salone.postman_collection.json)
-     e lanciarla con il *Collection Runner*. 80 richieste in 10 cartelle; ogni richiesta verifica lo status
+     e lanciarla con il *Collection Runner*. 83 richieste in 10 cartelle; ogni richiesta verifica lo status
      atteso (anche 400/401/403/404/409) e salva token e id nelle variabili della collection. L'ultima
      cartella ripristina i dati, quindi si può rilanciare. La cartella *03 - auto.dev* consuma crediti API.
    - **IntelliJ:** [`http/salone.http`](http/salone.http) (HTTP Client).
@@ -134,8 +134,8 @@ già notificata e il prezzo ci scende sotto, l'avviso riparte.
 | POST | `/api/admin/auto/import` `{listingId}` | 201 (bozza) · 409 · 502 (0 chiamate se l'anteprima è in memoria, altrimenti 2) |
 | GET | `/api/admin/auto?stato=&page=&size=&sort=` | 200 |
 | GET | `/api/admin/auto/{id}` | 200 · 404 |
-| PUT | `/api/admin/auto/{id}` `{km, prezzo, stato, descrizione}` | 200 · 400 |
-| PATCH | `/api/admin/auto/{id}/prezzo` `{prezzo}` | 200 |
+| PUT | `/api/admin/auto/{id}` `{km, stato, descrizione}` | 200 · 400 (il prezzo qui è ignorato) |
+| PATCH | `/api/admin/auto/{id}/prezzo` `{prezzo}` | 200 · 400 · unico modo per cambiare il prezzo: ricontrolla gli avvisi |
 | PATCH | `/api/admin/auto/{id}/pubblica` | 200 · 400 (dati mancanti) |
 | PATCH | `/api/admin/auto/{id}/bozza` | 200 |
 

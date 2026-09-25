@@ -49,14 +49,14 @@ public class AutoAdminController {
         return autoAdminService.dettaglio(id);
     }
 
-    // PUT /api/admin/auto/{id} -> 200 (km, prezzo, stato, descrizione)
+    // PUT /api/admin/auto/{id} -> 200 (km, stato, descrizione; il prezzo si cambia solo con PATCH /prezzo)
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public AutoAdminDto aggiorna(@PathVariable UUID id, @RequestBody @Valid AutoUpdateDto dto) {
         return autoAdminService.aggiorna(id, dto);
     }
 
-    // PATCH /api/admin/auto/{id}/prezzo -> 200
+    // PATCH /api/admin/auto/{id}/prezzo -> 200 (unico modo per cambiare il prezzo: ricontrolla gli avvisi)
     @PatchMapping("/{id}/prezzo")
     @ResponseStatus(HttpStatus.OK)
     public AutoAdminDto aggiornaPrezzo(@PathVariable UUID id, @RequestBody @Valid PrezzoUpdateDto dto) {
