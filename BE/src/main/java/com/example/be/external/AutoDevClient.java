@@ -114,10 +114,10 @@ public class AutoDevClient {
     }
 
     /**
-     * Ricerca generica su GET /listings con filtri opzionali marca/modello.
-     * FASE DI TEST: limit=1 di default, per scaricare un solo veicolo e non consumare crediti.
+     * Ricerca generica su GET /listings con filtri opzionali marca/modello, paginata (page parte da 1).
+     * Una chiamata per pagina; il numero di risultati per pagina (limit) non cambia il costo.
      */
-    public List<AnnuncioAutoDevRiassuntoDto> cercaAnnunci(String marca, String modello, Integer limit) {
+    public List<AnnuncioAutoDevRiassuntoDto> cercaAnnunci(String marca, String modello, Integer limit, int pagina) {
         verificaChiave();
         int limite = limit != null ? limit : limitDefault;
 
@@ -127,8 +127,9 @@ public class AutoDevClient {
                     // I valori passano come variabili URI: vengono codificati, niente concatenazione di stringhe
                     .uri(b -> {
                         Map<String, Object> variabili = new HashMap<>();
-                        b.path("/listings").queryParam("limit", "{limit}");
+                        b.path("/listings").queryParam("limit", "{limit}").queryParam("page", "{page}");
                         variabili.put("limit", limite);
+                        variabili.put("page", pagina);
                         if (marca != null) {
                             b.queryParam("vehicle.make", "{make}");
                             variabili.put("make", marca);

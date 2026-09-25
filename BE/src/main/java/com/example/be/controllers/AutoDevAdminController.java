@@ -23,15 +23,17 @@ public class AutoDevAdminController {
 
     private final AutoDevService autoDevService;
 
-    // GET /api/admin/autodev/listings?make=Tesla&model=Model 3 -> 200
-    // limit=1 di default (fase di test: un solo veicolo per non sprecare crediti), massimo 10
+    // GET /api/admin/autodev/listings?make=Tesla&model=Model 3&page=2 -> 200
+    // Una ricerca = 1 chiamata auto.dev, qualunque sia il numero di risultati: 20 per pagina di default,
+    // che e' anche il massimo del piano Free. page parte da 1 (auto.dev pagina con page+limit fino a 100).
     @GetMapping("/listings")
     @ResponseStatus(HttpStatus.OK)
     public List<AnnuncioAutoDevRiassuntoDto> cerca(
             @RequestParam(required = false) @Pattern(regexp = REGEX_TESTO_FILTRO, message = "Marca non valida") String make,
             @RequestParam(required = false) @Pattern(regexp = REGEX_TESTO_FILTRO, message = "Modello non valido") String model,
-            @RequestParam(required = false) @Min(1) @Max(10) Integer limit) {
-        return autoDevService.cerca(make, model, limit);
+            @RequestParam(required = false) @Min(1) @Max(20) Integer limit,
+            @RequestParam(defaultValue = "1") @Min(1) @Max(100) int page) {
+        return autoDevService.cerca(make, model, limit, page);
     }
 
     // GET /api/admin/autodev/listings/{listingId} -> 200

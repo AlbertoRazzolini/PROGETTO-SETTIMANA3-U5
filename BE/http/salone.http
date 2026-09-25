@@ -65,8 +65,8 @@ Content-Type: application/json
 
 ### ---------- AUTO.DEV (solo admin, consuma crediti) ----------
 
-### Ricerca su auto.dev (limit=1 di default)
-GET {{api}}/admin/autodev/listings?make=Tesla&model=Model 3
+### Ricerca su auto.dev (20 per pagina di default, page da 1)
+GET {{api}}/admin/autodev/listings?make=Tesla&model=Model 3&limit=1&page=1
 Authorization: Bearer {{tokenAdmin}}
 
 ### Anteprima annuncio completo: dati + foto, gia' in euro/km/italiano

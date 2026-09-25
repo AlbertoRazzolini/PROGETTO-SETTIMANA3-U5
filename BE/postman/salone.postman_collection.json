@@ -526,11 +526,11 @@
       "description": "Ogni richiesta di questa cartella chiama le API di auto.dev e consuma crediti. Richiede AUTODEV_API_KEY.",
       "item": [
         {
-          "name": "Ricerca su auto.dev (limit=1 di default)",
+          "name": "Ricerca su auto.dev (20 per pagina di default)",
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/admin/autodev/listings?make=Tesla&model=Model%203",
+            "url": "{{baseUrl}}/admin/autodev/listings?make=Tesla&model=Model%203&page=1",
             "auth": {
               "type": "bearer",
               "bearer": [
@@ -549,7 +549,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"Al massimo 1 risultato\", () => pm.expect(pm.response.json().length).to.be.at.most(1));"
+                  "pm.test(\"Al massimo 20 risultati\", () => pm.expect(pm.response.json().length).to.be.at.most(20));"
                 ]
               }
             }

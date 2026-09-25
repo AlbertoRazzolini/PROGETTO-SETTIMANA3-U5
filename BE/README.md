@@ -127,7 +127,7 @@ già notificata e il prezzo ci scende sotto, l'avviso riparte.
 ### Annunci — ADMIN (e SUPER_ADMIN)
 | Metodo | Path | Status |
 |---|---|---|
-| GET | `/api/admin/autodev/listings?make=&model=&limit=` | 200 (limit=1 di default: fase di test) |
+| GET | `/api/admin/autodev/listings?make=&model=&limit=&page=` | 200 (20 risultati per pagina di default, max 20; `page` da 1 a 100; 1 chiamata auto.dev per pagina) |
 | GET | `/api/admin/autodev/listings/{listingId}` | 200 · 404 · 502 |
 | POST | `/api/admin/auto/import` `{listingId}` | 201 (bozza) · 409 · 502 |
 | GET | `/api/admin/auto?stato=&page=&size=&sort=` | 200 |

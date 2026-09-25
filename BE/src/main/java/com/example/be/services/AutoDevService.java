@@ -70,8 +70,8 @@ public class AutoDevService {
     private final ConversioniService conversioniService;
     private final DescrizioneAutoGenerator descrizioneAutoGenerator;
 
-    public List<AnnuncioAutoDevRiassuntoDto> cerca(String marca, String modello, Integer limit) {
-        return autoDevClient.cercaAnnunci(marca, modello, limit).stream()
+    public List<AnnuncioAutoDevRiassuntoDto> cerca(String marca, String modello, Integer limit, int pagina) {
+        return autoDevClient.cercaAnnunci(marca, modello, limit, pagina).stream()
                 .map(r -> new AnnuncioAutoDevRiassuntoDto(r.listingId(), r.marca(), r.modello(), r.anno(),
                         traduciCarburante(r.carburante()), r.prezzoUsd(), r.miglia(), r.usato(), r.immaginePrincipale()))
                 .toList();
