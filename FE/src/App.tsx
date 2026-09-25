@@ -1,18 +1,16 @@
 import { Route, Routes } from 'react-router'
-import { PulsanteTema } from './tema/PulsanteTema'
+import { Layout } from './layout/Layout'
+
+function InCostruzione() {
+  return <p className="py-20 text-center text-slate-500 dark:text-slate-400">Pagina in costruzione</p>
+}
 
 function App() {
   return (
     <Routes>
-      <Route
-        path="*"
-        element={
-          <main className="flex min-h-screen flex-col items-center justify-center gap-4">
-            <h1 className="text-3xl font-bold">Salone Auto</h1>
-            <PulsanteTema />
-          </main>
-        }
-      />
+      <Route element={<Layout />}>
+        <Route path="*" element={<InCostruzione />} />
+      </Route>
     </Routes>
   )
 }

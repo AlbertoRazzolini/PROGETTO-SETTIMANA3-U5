@@ -3,6 +3,16 @@
 /* Modalita' notte a classe: attiva quando <html> ha la classe "dark" */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Font e colori presi dal design Stitch (progetto "Salone Auto") */
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --color-notte-sfondo: #0b1220;
+  --color-notte-card: #111a2e;
+  --color-notte-bordo: #1e293b;
+  --color-notte-hover: #162238;
+}
+
 @layer base {
   html {
     color-scheme: light;
@@ -11,6 +21,23 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-slate-50 text-slate-900 antialiased dark:bg-[#0B1220] dark:text-slate-100;
+    @apply bg-slate-50 text-slate-900 antialiased dark:bg-notte-sfondo dark:text-slate-100;
   }
+}
+
+/* Icone Material Symbols (le stesse usate da Stitch) */
+.icona {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0;
+}
+.icona-piena {
+  font-variation-settings: 'FILL' 1;
 }
