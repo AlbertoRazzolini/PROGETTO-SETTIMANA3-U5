@@ -6,15 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
-// Soglia di prezzo impostata da un utente su un'auto tra i suoi preferiti
+// Soglia di prezzo impostata da un utente su un'auto tra i suoi preferiti.
+// Relazione Preferito 1 -- 0..1 Avviso: la FK sta qui, quindi un preferito puo' non avere
+// alcuna soglia, ma un avviso non puo' esistere senza il preferito (lo garantisce il DB).
+// Utente e auto si ricavano dal preferito, senza duplicare la coppia (user_id, auto_id).
 @Entity
-@Table(name = "avvisi", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "auto_id"}))
+@Table(name = "avvisi")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,15 +30,12 @@ public class Avviso {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    // Se l'utente toglie l'auto dai preferiti, il DB cancella anche l'avviso (ON DELETE CASCADE)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "preferito_id", nullable = false, unique = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @Setter(AccessLevel.NONE)
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "auto_id", nullable = false)
-    @Setter(AccessLevel.NONE)
-    private Auto auto;
+    private Preferito preferito;
 
     @Column(nullable = false, precision = 9, scale = 2)
     private BigDecimal soglia;
@@ -60,9 +62,8 @@ public class Avviso {
     @Setter(AccessLevel.NONE)
     private Instant updatedAt;
 
-    public Avviso(User user, Auto auto, BigDecimal soglia) {
-        this.user = user;
-        this.auto = auto;
+    public Avviso(Preferito preferito, BigDecimal soglia) {
+        this.preferito = preferito;
         this.soglia = soglia;
     }
 }

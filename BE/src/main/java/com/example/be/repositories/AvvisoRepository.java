@@ -10,15 +10,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 // Avvisi cercati sempre per identificativo E proprietario insieme
+// (il proprietario si raggiunge tramite il preferito: avviso.preferito.user)
 public interface AvvisoRepository extends JpaRepository<Avviso, UUID> {
 
-    Page<Avviso> findByUserId(UUID userId, Pageable pageable);
+    Page<Avviso> findByPreferitoUserId(UUID userId, Pageable pageable);
 
-    Optional<Avviso> findByIdAndUserId(UUID id, UUID userId);
+    Optional<Avviso> findByIdAndPreferitoUserId(UUID id, UUID userId);
 
-    Optional<Avviso> findByUserIdAndAutoId(UUID userId, UUID autoId);
+    Optional<Avviso> findByPreferitoId(UUID preferitoId);
 
     Optional<Avviso> findByTokenDisattivazione(String tokenDisattivazione);
 
-    List<Avviso> findByAutoIdAndAttivoTrue(UUID autoId);
+    List<Avviso> findByPreferitoAutoIdAndAttivoTrue(UUID autoId);
 }
