@@ -138,7 +138,7 @@ export function PannelloModifica({
           <h2 id={`${id}-titolo`} className="text-lg font-bold">
             Modifica annuncio
           </h2>
-          <button type="button" onClick={onChiudi} aria-label="Chiudi" className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-notte-hover">
+          <button type="button" onClick={onChiudi} aria-label="Chiudi" className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-notte-hover">
             <Icona nome="close" className="text-xl" />
           </button>
         </div>

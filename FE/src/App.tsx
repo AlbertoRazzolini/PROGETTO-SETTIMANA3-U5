@@ -7,13 +7,10 @@ import { AdminImporta } from './pages/admin/AdminImporta'
 import { AdminUtenti } from './pages/admin/AdminUtenti'
 import { AreaGestione } from './pages/admin/AreaGestione'
 import { DettaglioAuto } from './pages/DettaglioAuto'
+import { NonTrovata } from './pages/NonTrovata'
 import { Notifiche } from './pages/Notifiche'
 import { Preferiti } from './pages/Preferiti'
 import { Vetrina } from './pages/Vetrina'
-
-function InCostruzione() {
-  return <p className="py-20 text-center text-slate-500 dark:text-slate-400">Pagina in costruzione</p>
-}
 
 function App() {
   return (
@@ -58,7 +55,7 @@ function App() {
             }
           />
         </Route>
-        <Route path="*" element={<InCostruzione />} />
+        <Route path="*" element={<NonTrovata />} />
       </Route>
     </Routes>
   )

@@ -22,7 +22,7 @@ export function ErrorePreferiti() {
     >
       <Icona nome="error" className="text-xl text-red-600 dark:text-red-400" />
       <span className="flex-1">{errore}</span>
-      <button type="button" onClick={chiudiErrore} aria-label="Chiudi" className="rounded p-1 text-slate-500 hover:bg-slate-100 dark:hover:bg-notte-hover">
+      <button type="button" onClick={chiudiErrore} aria-label="Chiudi" className="rounded p-1 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-notte-hover">
         <Icona nome="close" className="text-lg" />
       </button>
     </div>
