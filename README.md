@@ -96,8 +96,9 @@ Il piano Free di auto.dev ha un numero limitato di chiamate, quindi il back-end 
 │   ├── src/        codice e test
 │   ├── http/       richieste di prova per l'HTTP Client di IntelliJ
 │   └── postman/    collection Postman con test automatici
-└── FE/             front-end React
-    └── src/        pagine, componenti, chiamate API
+├── FE/             front-end React
+│   └── src/        pagine, componenti, chiamate API
+└── progettazione/  documento di progettazione (requisiti di partenza e note di realizzazione)
 ```
 
 La grafica del front-end è stata progettata con Google Stitch e poi convertita in componenti React.
