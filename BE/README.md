@@ -44,6 +44,7 @@ prima del primo avvio.
 |---|---|---|
 | `DB_URL` / `DB_USERNAME` / `DB_PASSWORD` | `jdbc:postgresql://localhost:5432/db-PS3U5` / `postgres` / `1234` | |
 | `AUTODEV_API_KEY` | — | **Obbligatoria** per importare annunci da auto.dev |
+| `AUTODEV_LIMIT_DEFAULT` | `20` | Risultati per pagina della ricerca auto.dev se il client non manda `limit` (vedi sotto) |
 | `MAIL_USERNAME` / `MAIL_PASSWORD` | — | Account Gmail e *password per le app*: **mai nel repository** |
 | `MAIL_HOST` / `MAIL_PORT` / `MAIL_FROM` | `smtp.gmail.com` / `587` / … | |
 | `JWT_SECRET` / `JWT_EXPIRATION` | valore didattico / 1 settimana | In produzione solo da variabile d'ambiente |
@@ -152,9 +153,15 @@ Un utente senza token riceve **401**; un utente autenticato senza il ruolo richi
 ## Integrazione auto.dev
 
 1. `GET /listings/{id}` (senza `select`: serve tutto l'albero JSON) → dati commerciali (`retailListing`),
-   scheda tecnica (`vehicle`), carburante (`vehicle.fuel`) e VIN.
+   scheda tecnica (`vehicle`), carburante e VIN. La consegna indica `vehicle.fuelType`, ma nelle risposte
+   reali di auto.dev il campo è `vehicle.fuel`: si legge `fuel` e, se manca, `fuelType`.
 2. `GET /photos/{vin}` → galleria in alta risoluzione.
 3. Le due chiamate asincrone hanno ciascuna il proprio `try/catch` e vengono unite in un unico oggetto.
+4. Ricerca generica `GET /listings` con filtri opzionali `make`/`model`. **Durante lo sviluppo il default era
+   `limit=1`**, come richiesto dalla consegna per la fase di test (un solo veicolo per non consumare crediti).
+   Chiusa la fase di test, il default è passato a 20 (il massimo del piano Free) ed è configurabile con
+   `AUTODEV_LIMIT_DEFAULT`: impostandola a `1` si torna al comportamento di test. Il front-end manda sempre
+   il `limit` scelto dall'admin; ogni pagina di risultati costa comunque 1 sola chiamata.
 
 **Da USA a Italia** (una sola volta, all'import): prezzo USD → EUR con tasso fisso
 (`app.cambio.usd-eur`), miglia → km, carburante con dizionario fisso, descrizione del venditore
