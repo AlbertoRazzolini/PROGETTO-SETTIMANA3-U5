@@ -63,6 +63,7 @@ public class AutoAdminService {
         auto.setStatoPubblicazione(StatoPubblicazione.BOZZA);
 
         autoRepository.saveAndFlush(auto);
+        autoDevService.dimenticaAnteprima(id);
         log.info("Importato annuncio {} come bozza (auto id {})", id, auto.getId());
         return autoMapper.toAdminDto(auto);
     }

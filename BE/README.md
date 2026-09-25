@@ -128,8 +128,8 @@ già notificata e il prezzo ci scende sotto, l'avviso riparte.
 | Metodo | Path | Status |
 |---|---|---|
 | GET | `/api/admin/autodev/listings?make=&model=&limit=&page=` | 200 (20 risultati per pagina di default, max 20; `page` da 1 a 100; 1 chiamata auto.dev per pagina) |
-| GET | `/api/admin/autodev/listings/{listingId}` | 200 · 404 · 502 |
-| POST | `/api/admin/auto/import` `{listingId}` | 201 (bozza) · 409 · 502 |
+| GET | `/api/admin/autodev/listings/{listingId}` | 200 · 404 · 502 (2 chiamate auto.dev; l'anteprima resta in memoria 30 minuti) |
+| POST | `/api/admin/auto/import` `{listingId}` | 201 (bozza) · 409 · 502 (0 chiamate se l'anteprima è in memoria, altrimenti 2) |
 | GET | `/api/admin/auto?stato=&page=&size=&sort=` | 200 |
 | GET | `/api/admin/auto/{id}` | 200 · 404 |
 | PUT | `/api/admin/auto/{id}` `{km, prezzo, stato, descrizione}` | 200 · 400 |

@@ -69,6 +69,7 @@ public class AutoDevService {
     private final TraduzioneService traduzioneService;
     private final ConversioniService conversioniService;
     private final DescrizioneAutoGenerator descrizioneAutoGenerator;
+    private final AnteprimeRecenti anteprimeRecenti;
 
     public List<AnnuncioAutoDevRiassuntoDto> cerca(String marca, String modello, Integer limit, int pagina) {
         return autoDevClient.cercaAnnunci(marca, modello, limit, pagina).stream()
@@ -77,7 +78,24 @@ public class AutoDevService {
                 .toList();
     }
 
+    /**
+     * Anteprima localizzata dell'annuncio. Costa 2 chiamate auto.dev, ma se lo stesso annuncio e' stato
+     * visto da poco (AnteprimeRecenti) si riusa: tipicamente l'import subito dopo l'anteprima costa 0.
+     */
     public AnteprimaAnnuncioDto anteprima(String listingId) {
+        return anteprimeRecenti.trova(listingId).orElseGet(() -> {
+            AnteprimaAnnuncioDto nuova = costruisciAnteprima(listingId);
+            anteprimeRecenti.salva(listingId, nuova);
+            return nuova;
+        });
+    }
+
+    // Dopo l'import l'annuncio e' nel DB: la copia in memoria non serve piu'
+    public void dimenticaAnteprima(String listingId) {
+        anteprimeRecenti.rimuovi(listingId);
+    }
+
+    private AnteprimaAnnuncioDto costruisciAnteprima(String listingId) {
         AnnuncioAutoDevDto a = autoDevClient.getAnnuncioCompleto(listingId);
         String carburante = traduciCarburante(a.carburante());
 
