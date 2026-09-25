@@ -1,0 +1,212 @@
+### =====================================================================
+### Mini Salone Auto - richieste di prova (HTTP Client di IntelliJ)
+### Eseguire dall'alto verso il basso: i login salvano i token in variabili globali.
+### =====================================================================
+
+@api = http://localhost:8080/api
+
+### ---------- AUTH ----------
+
+### Login USER (seeder)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{"email": "user@example.com", "password": "User1234!"}
+
+> {% client.global.set("tokenUser", response.body.token); %}
+
+### Login ADMIN (seeder)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{"email": "admin@example.com", "password": "Admin1234!"}
+
+> {% client.global.set("tokenAdmin", response.body.token); %}
+
+### Login SUPER_ADMIN (seeder)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{"email": "superadmin@example.com", "password": "SuperAdmin1234!"}
+
+> {% client.global.set("tokenSuper", response.body.token); %}
+
+### Registrazione (201) - "ruolo" nel body viene ignorato: il nuovo utente e' sempre USER
+POST {{api}}/auth/register
+Content-Type: application/json
+
+{"nome": "Anna", "cognome": "Neri", "email": "anna.neri@example.com", "password": "Password1", "ruolo": "SUPER_ADMIN"}
+
+### Login errato (401)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{"email": "user@example.com", "password": "Sbagliata1"}
+
+### ---------- PROFILO ----------
+
+### Il mio profilo (200)
+GET {{api}}/utenti/me
+Authorization: Bearer {{tokenUser}}
+
+### Modifica nome e cognome (200)
+PUT {{api}}/utenti/me
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"nome": "Mario", "cognome": "Rossi"}
+
+### Cambio password (204) - password attuale errata -> 400
+PATCH {{api}}/utenti/me/password
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"passwordAttuale": "User1234!", "nuovaPassword": "User1234!"}
+
+### ---------- AUTO.DEV (solo admin, consuma crediti) ----------
+
+### Ricerca su auto.dev (limit=1 di default)
+GET {{api}}/admin/autodev/listings?make=Tesla&model=Model 3
+Authorization: Bearer {{tokenAdmin}}
+
+### Anteprima annuncio completo: dati + foto, gia' in euro/km/italiano
+GET {{api}}/admin/autodev/listings/4S4BTANC3S3331550
+Authorization: Bearer {{tokenAdmin}}
+
+### ---------- ANNUNCI (admin) ----------
+
+### Import come bozza (201) - gia' importato -> 409
+POST {{api}}/admin/auto/import
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{"listingId": "4S4BTANC3S3331550"}
+
+> {% client.global.set("autoId", response.body.id); %}
+
+### Elenco annunci, bozze comprese (200)
+GET {{api}}/admin/auto?stato=BOZZA&page=0&size=10&sort=prezzo,desc
+Authorization: Bearer {{tokenAdmin}}
+
+### Dettaglio admin (200)
+GET {{api}}/admin/auto/{{autoId}}
+Authorization: Bearer {{tokenAdmin}}
+
+### Modifica completa (200)
+PUT {{api}}/admin/auto/{{autoId}}
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{"km": 15000, "prezzo": 33900.00, "stato": "USATO", "descrizione": "Subaru Outback Limited 2025 in ottime condizioni."}
+
+### Pubblica (200)
+PATCH {{api}}/admin/auto/{{autoId}}/pubblica
+Authorization: Bearer {{tokenAdmin}}
+
+### Cambio prezzo (200) - fa scattare il controllo degli avvisi
+PATCH {{api}}/admin/auto/{{autoId}}/prezzo
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{"prezzo": 32400.00}
+
+### Un USER che prova a cambiare il prezzo -> 403
+PATCH {{api}}/admin/auto/{{autoId}}/prezzo
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"prezzo": 1}
+
+### Rimetti in bozza (200)
+PATCH {{api}}/admin/auto/{{autoId}}/bozza
+Authorization: Bearer {{tokenAdmin}}
+
+### ---------- VETRINA (pubblica, senza token) ----------
+
+### Ricerca paginata (10 per pagina)
+GET {{api}}/auto?q=subaru&stato=USATO&carburante=Benzina&prezzoMin=10000&prezzoMax=40000&page=0&sort=prezzo,asc
+
+### Ordinamento non ammesso -> 400
+GET {{api}}/auto?sort=password
+
+### Suggerimenti (dalla 3a lettera)
+GET {{api}}/auto/suggerimenti?q=sub
+
+### Dettaglio pubblico (404 se in bozza)
+GET {{api}}/auto/{{autoId}}
+
+### ---------- PREFERITI (utente registrato) ----------
+
+### Aggiungi ai preferiti (201) - auto in bozza -> 404, doppione -> 409
+POST {{api}}/preferiti
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"autoId": "{{autoId}}"}
+
+> {% client.global.set("preferitoId", response.body.id); %}
+
+### I miei preferiti (200)
+GET {{api}}/preferiti?page=0
+Authorization: Bearer {{tokenUser}}
+
+### ---------- AVVISI DI PREZZO ----------
+
+### Imposta una soglia su un preferito (201)
+POST {{api}}/avvisi
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"preferitoId": "{{preferitoId}}", "soglia": 30000.00}
+
+> {% client.global.set("avvisoId", response.body.id); %}
+
+### I miei avvisi (200)
+GET {{api}}/avvisi
+Authorization: Bearer {{tokenUser}}
+
+### Nuova soglia (200)
+PUT {{api}}/avvisi/{{avvisoId}}
+Authorization: Bearer {{tokenUser}}
+Content-Type: application/json
+
+{"soglia": 25000.00}
+
+### L'admin prova a modificare l'avviso dell'utente -> 404 (non sa nemmeno che esiste)
+PUT {{api}}/avvisi/{{avvisoId}}
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{"soglia": 1}
+
+### Elimina avviso (204)
+DELETE {{api}}/avvisi/{{avvisoId}}
+Authorization: Bearer {{tokenUser}}
+
+### ---------- NOTIFICHE ----------
+
+### Storico notifiche (200)
+GET {{api}}/notifiche?nonLette=false&page=0
+Authorization: Bearer {{tokenUser}}
+
+### Numero di non lette (200)
+GET {{api}}/notifiche/conteggio
+Authorization: Bearer {{tokenUser}}
+
+### Segna tutte come lette (204)
+PATCH {{api}}/notifiche/lette
+Authorization: Bearer {{tokenUser}}
+
+### Rimuovi dai preferiti (204) - cancella anche l'eventuale avviso collegato
+DELETE {{api}}/preferiti/{{preferitoId}}
+Authorization: Bearer {{tokenUser}}
+
+### ---------- SUPER-ADMIN ----------
+
+### Elenco utenti (200) - ADMIN/USER -> 403
+GET {{api}}/superadmin/utenti?page=0
+Authorization: Bearer {{tokenSuper}}
+
+### Elenco utenti come ADMIN -> 403
+GET {{api}}/superadmin/utenti
+Authorization: Bearer {{tokenAdmin}}
