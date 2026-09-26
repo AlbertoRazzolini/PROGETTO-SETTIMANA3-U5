@@ -7,9 +7,11 @@ import type { AutoCard, Pagina, StatoAuto } from '../api/types'
 import { CardAuto } from '../components/auto/CardAuto'
 import { CardAutoEvidenza } from '../components/auto/CardAutoEvidenza'
 import { Icona } from '../components/Icona'
+import MoltenMetal from '../components/MoltenMetal'
 import { Paginazione } from '../components/Paginazione'
 import { BarraRicerca } from '../components/vetrina/BarraRicerca'
 import { FiltriVetrina, type ValoriFiltri } from '../components/vetrina/FiltriVetrina'
+import { usePreferisceMenoAnimazioni } from '../utils/animazioni'
 
 const STATI_VALIDI: StatoAuto[] = ['NUOVO', 'KM_0', 'USATO']
 const SORT_VALIDI: string[] = ORDINAMENTI.map((o) => o.valore)
@@ -59,6 +61,15 @@ export function Vetrina() {
 
   const [risultato, setRisultato] = useState<Risultato | null>(null)
   const { preferitoDi, inCorso, alternaPreferito } = usePreferiti()
+  const ridotto = usePreferisceMenoAnimazioni()
+  // Lo sfondo animato usa WebGL2: se non c'è (dispositivi vecchi), resta solo il gradiente di base
+  const [webglOk] = useState(() => {
+    try {
+      return !!document.createElement('canvas').getContext('webgl2')
+    } catch {
+      return false
+    }
+  })
   const propsPreferito = (auto: AutoCard) => ({
     preferito: preferitoDi(auto.id) !== undefined,
     inCorso: inCorso(auto.id),
@@ -112,13 +123,37 @@ export function Vetrina() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-notte-bordo dark:bg-notte-card">
-        <div className="mx-auto max-w-4xl space-y-4">
+      <section className="relative overflow-hidden rounded-xl border border-slate-200 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 shadow-sm dark:border-notte-bordo">
+        {/* Sfondo animato "molten metal": decorativo, dietro al contenuto, fermo se le animazioni sono ridotte */}
+        {!ridotto && webglOk && (
+          <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+            <MoltenMetal
+              color1="#0c0628"
+              color2="#deabdc"
+              color3="#571212"
+              speed={0.35}
+              scale={6}
+              detail={3}
+              glow={1.6}
+              coreSize={0.1}
+              swirl={1}
+              fold={-0.25}
+              blackPoint={0.08}
+              brightness={1.6}
+              colorMode="molten"
+              grain
+              grainIntensity={0.05}
+              mouseInteraction={false}
+              opacity={1}
+            />
+          </div>
+        )}
+        {/* Velo scuro per garantire il contrasto del testo bianco sopra lo sfondo */}
+        <div className="pointer-events-none absolute inset-0 bg-slate-950/30" aria-hidden="true" />
+        <div className="relative mx-auto max-w-4xl space-y-4 p-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Vetrina veicoli disponibili</h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Le migliori offerte su vetture nuove, km 0 e usate.
-            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-white drop-shadow">Vetrina veicoli disponibili</h1>
+            <p className="mt-1 text-sm text-slate-200">Le migliori offerte su vetture nuove, km 0 e usate.</p>
           </div>
           <BarraRicerca key={filtri.q ?? ''} valoreIniziale={filtri.q ?? ''} onCerca={(q) => aggiornaFiltri({ q: q || undefined })} />
         </div>

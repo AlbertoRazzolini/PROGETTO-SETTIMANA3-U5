@@ -7,7 +7,9 @@ import type { AutoCard, AutoDettaglio } from '../api/types'
 import { GalleriaAuto } from '../components/auto/GalleriaAuto'
 import { BadgeStato, SpecificheAuto } from '../components/auto/PartiAuto'
 import { SchedaTecnica } from '../components/auto/SchedaTecnica'
+import CountUp from '../components/CountUp'
 import { Icona } from '../components/Icona'
+import { usePreferisceMenoAnimazioni } from '../utils/animazioni'
 import { BoxAvviso } from '../preferiti/BoxAvviso'
 import { usePreferiti } from '../preferiti/preferitiState'
 import { formattaData, formattaPrezzo } from '../utils/formatta'
@@ -84,7 +86,7 @@ export function DettaglioAuto() {
               <p className="text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
                 Prezzo di vendita
               </p>
-              <p className="text-4xl font-extrabold">{formattaPrezzo(auto.prezzo)}</p>
+              <PrezzoAnimato prezzo={auto.prezzo} />
             </div>
             <AzioniPreferito auto={auto} />
             <p className="text-center text-xs text-slate-500 dark:text-slate-400">
@@ -109,6 +111,27 @@ export function DettaglioAuto() {
 
       <SchedaTecnica scheda={auto.schedaTecnica} vin={auto.vin} />
     </div>
+  )
+}
+
+// Prezzo che "conta" da 0 fino al valore dell'auto (CountUp). Statico se le animazioni sono ridotte.
+// I prezzi sono euro interi: si anima l'intero con separatore "." (stile it), poi il "€", come formattaPrezzo.
+function PrezzoAnimato({ prezzo }: { prezzo: number }) {
+  const ridotto = usePreferisceMenoAnimazioni()
+  return (
+    <p className="text-4xl font-extrabold">
+      {/* Valore reale per gli screen reader; l'animazione è solo decorativa */}
+      <span className="sr-only">{formattaPrezzo(prezzo)}</span>
+      <span aria-hidden="true">
+        {ridotto ? (
+          formattaPrezzo(prezzo)
+        ) : (
+          <>
+            <CountUp to={Math.round(prezzo)} from={0} separator="." duration={0.5} className="tabular-nums" /> €
+          </>
+        )}
+      </span>
+    </p>
   )
 }
 

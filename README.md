@@ -89,6 +89,15 @@ Il piano Free di auto.dev ha un numero limitato di chiamate, quindi il back-end 
 
 ---
 
+## Sicurezza
+
+Le protezioni previste (validazione degli input, ruoli, isolamento delle risorse per proprietario, difesa da
+injection e XSS, CORS ristretto) sono state verificate simulando attacchi contro l'app in esecuzione su quattro
+fronti — JWT/WebSocket, injection, XSS, controllo accessi/CORS — senza riuscire ad aggirarle. Dettagli e scelte
+nella sezione [Sicurezza del back-end](BE/README.md#sicurezza-scelte-principali).
+
+---
+
 ## Struttura del repository
 
 ```

@@ -185,6 +185,18 @@ Il risultato è salvato nel DB come bozza e l'admin può correggerlo prima di pu
 - Template mail con solo `th:text`/`th:href` (escape automatico); link di disattivazione con **token casuale monouso**.
 - CORS e WebSocket aperti solo all'origine del frontend; API key e password Gmail solo da variabili d'ambiente.
 
+### Test di sicurezza
+
+Le difese sono state verificate simulando attacchi contro l'istanza in esecuzione, su quattro fronti:
+manomissione dei token JWT e accesso WebSocket, SQL injection e parametri malformati, XSS memorizzato
+(nome utente e descrizione), controllo degli accessi (IDOR, scalata di privilegi, campi extra nel body) e CORS.
+Nessun attacco ha aggirato le protezioni: token manomessi/scaduti e header malformati respinti (401), risorse
+di altri utenti non accessibili (404), scalata di privilegi bloccata (403), injection neutralizzata dai parametri
+legati e dalla whitelist di ordinamento, valori ostili trattati come testo, CORS ristretto alla sola origine del
+front-end. A seguito dei test sono stati aggiunti due irrigidimenti: nessuno stack trace o versione del server
+sugli errori di basso livello (pagina d'errore di default di Tomcat silenziata), e risposta 400 (non 500) sui
+parametri con codifica non valida.
+
 ## Test
 
 ```bash
