@@ -2,6 +2,7 @@ package com.example.be.exceptions;
 
 import com.example.be.dto.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.InvalidParameterException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -84,6 +85,14 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handleParametroMancante(MissingServletRequestParameterException ex) {
         return errore(HttpStatus.BAD_REQUEST, "Parametro obbligatorio mancante: '" + ex.getParameterName() + "'");
+    }
+
+    // Parametro con percent-encoding non valido (es. ?q=%FF): richiesta malformata del client, non errore del
+    // server. Senza questo handler finirebbe nel gestore generico come 500. Il valore corrotto non si registra.
+    @ExceptionHandler(InvalidParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleParametroNonDecodificabile(InvalidParameterException ex) {
+        return errore(HttpStatus.BAD_REQUEST, "Parametro della richiesta non valido");
     }
 
     // ---------- 401 / 403 ----------
