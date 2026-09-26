@@ -5,7 +5,8 @@ per vetrina, preferiti, avvisi di prezzo, notifiche in tempo reale e area di ges
 Grafica progettata su Google Stitch (progetto "Salone Auto"), con modalità chiara e notte.
 
 **Stack:** React 19 · TypeScript 6 · Vite 8 · React Router 8 · Axios · @stomp/stompjs (WebSocket) ·
-Tailwind CSS 4 · font Plus Jakarta Sans e icone Material Symbols (Google Fonts).
+Tailwind CSS 4 · font Plus Jakarta Sans e icone Material Symbols (Google Fonts) ·
+motion (prezzo animato) e ogl (sfondo WebGL).
 
 ---
 
@@ -88,6 +89,10 @@ i link si possono condividere e il tasto indietro del browser funziona.
 - **Modalità notte.** Classe `dark` su `<html>` con le varianti `dark:` di Tailwind. Senza una scelta
   salvata segue il tema del sistema; uno script in `index.html` la applica prima del primo render
   per evitare il lampo di tema chiaro.
+- **Effetti visivi.** Il prezzo nel dettaglio "conta" da 0 al suo valore (componente `CountUp`, motion);
+  lo sfondo animato "molten metal" (WebGL/ogl) è dietro a tutte le pagine, aggiunto una volta nel `Layout`.
+  Entrambi rispettano `prefers-reduced-motion` (restano fermi) e lo sfondo si disattiva senza WebGL2;
+  il valore del prezzo resta comunque leggibile dagli screen reader.
 
 ---
 
