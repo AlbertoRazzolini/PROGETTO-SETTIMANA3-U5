@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router'
+import { SfondoMolten } from '../components/SfondoMolten'
 import { NotificheArrivate } from '../notifiche/NotificheArrivate'
 import { ErrorePreferiti } from '../preferiti/ErrorePreferiti'
 import { Footer } from './Footer'
@@ -7,6 +8,7 @@ import { Header } from './Header'
 export function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
+      <SfondoMolten />
       <Header />
       <main className="mx-auto w-full max-w-[1440px] flex-1 px-4 py-8 md:px-8">
         <Outlet />

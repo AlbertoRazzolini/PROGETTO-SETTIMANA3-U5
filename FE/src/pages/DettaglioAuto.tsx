@@ -127,7 +127,7 @@ function PrezzoAnimato({ prezzo }: { prezzo: number }) {
           formattaPrezzo(prezzo)
         ) : (
           <>
-            <CountUp to={Math.round(prezzo)} from={0} separator="." duration={0.5} className="tabular-nums" /> €
+            <CountUp to={Math.round(prezzo)} from={0} separator="." duration={0.3} className="tabular-nums" /> €
           </>
         )}
       </span>
